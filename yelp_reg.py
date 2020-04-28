@@ -25,3 +25,72 @@ photos.head()
 
 print(len(businesses))
 print(reviews.columns)
+users.describe()
+
+businesses[businesses['business_id'] == '5EvUIR4IzCWUOm0PsUZXjA']['stars']
+
+
+df = pd.merge(businesses, reviews, how='left', on='business_id')
+print(len(df))
+
+
+df = pd.merge(df, users, how='left', on='business_id')
+df = pd.merge(df, checkins, how='left', on='business_id')
+df = pd.merge(df, tips, how='left', on='business_id')
+df = pd.merge(df, photos, how='left', on='business_id')
+
+
+print(df.columns)
+
+
+features_to_remove = ['address','attributes','business_id','categories','city','hours','is_open','latitude','longitude','name','neighborhood','postal_code','state','time']
+df.drop(labels=features_to_remove, axis=1, inplace=True)
+
+
+df.isna().any()
+
+
+df.fillna({'weekday_checkins':0,
+           'weekend_checkins':0,
+           'average_tip_length':0,
+           'number_tips':0,
+           'average_caption_length':0,
+           'number_pics':0},
+          inplace=True)
+
+
+df.isna().any()
+
+
+df.corr()
+
+
+from matplotlib import pyplot as plt
+
+# plot average_review_sentiment against stars here
+plt.scatter(df['average_review_sentiment'],df['stars'],alpha=0.1)
+plt.xlabel('average_review_sentiment')
+plt.ylabel('Yelp Rating')
+plt.show()
+
+
+# plot average_review_length against stars here
+plt.scatter(df['average_review_length'],df['stars'],alpha=0.1)
+plt.xlabel('average_review_length')
+plt.ylabel('Yelp Rating')
+plt.show()
+
+
+# plot average_review_age against stars here
+plt.scatter(df['average_review_age'],df['stars'],alpha=0.1)
+plt.xlabel('average_review_age')
+plt.ylabel('Yelp Rating')
+plt.show()
+
+
+# plot number_funny_votes against stars here
+plt.scatter(df['number_funny_votes'],df['stars'],alpha=0.1)
+plt.xlabel('number_funny_votes')
+plt.ylabel('Yelp Rating')
+plt.show()
+
